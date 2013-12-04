@@ -1,0 +1,7 @@
+AuthType Basic
+AuthName "restricted"
+AuthUserFile htpasswd
+AuthGroupFile /dev/null
+<Limit GET POST PUT DELETE>
+  Require valid-user
+</Limit>
