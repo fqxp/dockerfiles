@@ -1,7 +1,9 @@
 from tianon/debian:wheezy
 
+env DEBIAN_FRONTEND noninteractive
+
 run apt-get update
-run apt-get install -y apache2
+run apt-get install -y --force-yes apache2
 
 env APACHE_RUN_USER www-data
 env APACHE_RUN_GROUP www-data
