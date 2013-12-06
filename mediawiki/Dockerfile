@@ -19,7 +19,7 @@ run ln -s /srv/data/images /srv/mediawiki/images
 
 add apache2.conf /etc/apache2/sites-available/default
 
-volume ["/srv/data"]
+volume ["/srv/data", "/var/log/apache2"]
 expose 80
 
 cmd ["/usr/sbin/apache2", "-D", "FOREGROUND", "-X"]
