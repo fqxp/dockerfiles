@@ -1,1 +1,5 @@
 mediawiki/mediawiki-*.tar.gz
+deb_dist/
+build/
+*.deb
+*.pyc
