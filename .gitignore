@@ -1,4 +1,6 @@
 mediawiki/mediawiki-*.tar.gz
+ruby2.0/ruby-*.tar.gz
+righteye/
 deb_dist/
 build/
 *.deb
