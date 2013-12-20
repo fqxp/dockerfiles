@@ -5,3 +5,5 @@ deb_dist/
 build/
 *.deb
 *.pyc
+venv/
+TODO.md
