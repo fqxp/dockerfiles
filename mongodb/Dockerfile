@@ -8,4 +8,7 @@ env DEBIAN_FRONTEND noninteractive
 run apt-get update
 run apt-get install -y --force-yes mongodb-10gen
 
+volume ["/var/log/mongodb"]
+expose 27017
+
 cmd ["/usr/bin/mongod", "--config", "/etc/mongodb.conf"]
