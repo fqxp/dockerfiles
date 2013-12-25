@@ -9,7 +9,9 @@ env APACHE_RUN_USER www-data
 env APACHE_RUN_GROUP www-data
 env APACHE_LOG_DIR /var/log/apache2
 
+add start.sh /
+
 volume ["/var/log/apache2"]
 expose 80
 
-cmd ["/usr/sbin/apache2", -D", "FOREGROUND", "-X"]
+cmd ["/start.sh"]
