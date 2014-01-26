@@ -1,8 +1,8 @@
 # A docker base image with SSH access
 
-The image `fqxp/base` provides a Debian-based docker container, derived from `tianon/debian:wheezy`.
-It features supervisor-managed pluggable services and SSH access, plus later some convenience
-stuff.
+The image `fqxp/base` provides a Debian-based docker container, derived from
+`tianon/debian:wheezy`. It features supervisor-managed pluggable services and
+SSH access, plus some convenience stuff.
 
 ## Building the container
 
