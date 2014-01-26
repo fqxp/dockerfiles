@@ -1,17 +1,13 @@
-from tianon/debian:wheezy
+from fqxp/base
 
 env DEBIAN_FRONTEND noninteractive
 
 run apt-get update
 run apt-get install -y --force-yes apache2
 
-env APACHE_RUN_USER www-data
-env APACHE_RUN_GROUP www-data
-env APACHE_LOG_DIR /var/log/apache2
+# disable default site configuration
+run a2dismod default default-ssl
 
-add start.sh /
+expose 80 443
 
-volume ["/var/log/apache2"]
-expose 80
-
-cmd ["/start.sh"]
+cmd /start.sh
