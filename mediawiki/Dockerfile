@@ -1,25 +1,24 @@
-from fqxp/apache2
+from fqxp/nginx
 
 env DEBIAN_FRONTEND noninteractive
 
 run apt-get update
-run apt-get install -y libapache2-mod-php5 php5-cli php-apc php5-mcrypt php5-sqlite sqlite php5-gd php5-intl imagemagick
-run a2enmod php5
+run apt-get install -y php5-fpm php5-cli php-apc php5-mcrypt php5-sqlite php5-mysql sqlite php5-gd php5-intl imagemagick
 
-add http://download.wikimedia.org/mediawiki/1.21/mediawiki-1.21.3.tar.gz /tmp/mediawiki.tgz
-#add mediawiki-1.21.3.tar.gz /tmp/mediawiki.tgz
-run mkdir -p /srv/mediawiki
-run tar -xzf /tmp/mediawiki.tgz -C /srv/mediawiki --strip-components=1
+#add http://download.wikimedia.org/mediawiki/1.21/mediawiki-1.21.3.tar.gz /tmp/mediawiki.tgz
+add mediawiki-1.21.3.tar.gz /srv/
+run mv /srv/mediawiki-1.21.3 /srv/mediawiki
 run chown -R root.www-data /srv/mediawiki
 run chown -R www-data.www-data /srv/mediawiki/mw-config
 run rm -rf /srv/mediawiki/images
 run ln -sf /srv/data/LocalSettings.php /srv/mediawiki/LocalSettings.php
 run ln -sf /srv/data/images /srv/mediawiki/images
 
-add mediawiki.conf /etc/apache2/sites-enabled/
+add mediawiki.conf /etc/nginx/sites-enabled/
+add php5-fpm.conf /etc/supervisor/conf.d/
 
 volume /srv/data
-volume /var/log/apache2
+volume /var/log/nginx
 expose 80
 
 cmd /start.sh
