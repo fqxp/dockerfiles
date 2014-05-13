@@ -18,6 +18,9 @@ run sed -i.bak 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/s
 # set locale (to fix perl locale warnings)
 run localedef -c -i en_US -f UTF-8 en_US.UTF-8 || :
 
+# create directory for optional setup scripts
+run install -m 755 -d /setup.d
+
 # set up startup via supervisor
 add sshd.conf /etc/supervisor/conf.d/
 add start.sh /
