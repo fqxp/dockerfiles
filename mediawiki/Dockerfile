@@ -6,9 +6,9 @@ run apt-get update
 run apt-get install -y php5-fpm php5-cli php-apc php5-mcrypt php5-sqlite php5-mysql sqlite php5-gd php5-intl imagemagick pwgen mysql-client
 
 # Download and setup MediaWiki
-#add http://download.wikimedia.org/mediawiki/1.21/mediawiki-1.21.3.tar.gz /tmp/mediawiki.tgz
-add mediawiki-1.21.3.tar.gz /srv/
-run mv /srv/mediawiki-1.21.3 /srv/mediawiki
+#add http://releases.wikimedia.org/mediawiki/1.22/mediawiki-1.22.6.tar.gz /tmp/mediawiki.tgz
+add mediawiki-1.22.6.tar.gz /srv/
+run mv /srv/mediawiki-1.22.6 /srv/mediawiki
 run chown -R root.www-data /srv/mediawiki
 run chown -R www-data.www-data /srv/mediawiki/mw-config
 run rm -rf /srv/mediawiki/images
