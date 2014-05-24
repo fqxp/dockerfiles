@@ -12,7 +12,6 @@ run mv /srv/mediawiki-1.21.3 /srv/mediawiki
 run chown -R root.www-data /srv/mediawiki
 run chown -R www-data.www-data /srv/mediawiki/mw-config
 run rm -rf /srv/mediawiki/images
-run ln -sf /srv/data/LocalSettings.php /srv/mediawiki/LocalSettings.php
 run ln -sf /srv/data/images /srv/mediawiki/images
 
 # Add MediaWiki to nginx

@@ -14,45 +14,54 @@ MEDIAWIKI_ADMIN_USER=${MEDIAWIKI_ADMIN_USER:-WikiSysop}
 
 MEDIAWIKI_SCRIPTPATH=$MEDIAWIKI_SERVER
 
-if [ ! -e /srv/data/LocalSettings.php ]; then
-  # Add DB user and grant privileges
-  mysql -u root -p${MYSQL_ENV_MYSQL_ROOT_PASSWORD} -h ${MYSQL_PORT_3306_TCP_ADDR} <<EOF
-    CREATE DATABASE IF NOT EXISTS ${MEDIAWIKI_DBNAME};
-    GRANT INDEX, CREATE, SELECT, INSERT, UPDATE, DELETE, ALTER, LOCK TABLES
-      ON ${MEDIAWIKI_DBNAME}.*
-      TO '${MEDIAWIKI_DBUSER}' IDENTIFIED BY '${MEDIAWIKI_DBPASS}';
-    FLUSH PRIVILEGES;
+MEDIAWIKI_DIR=/srv/mediawiki
+DATA_DIR=/srv/data
+
+LOCAL_SETTINGS=${MEDIAWIKI_DIR}/LocalSettings.php
+EXTRA_LOCAL_SETTINGS=${DATA_DIR}/LocalSettings.php
+
+# Add DB user and grant privileges
+mysql -u root -p${MYSQL_ENV_MYSQL_ROOT_PASSWORD} -h ${MYSQL_PORT_3306_TCP_ADDR} <<EOF
+  CREATE DATABASE IF NOT EXISTS ${MEDIAWIKI_DBNAME};
+  DROP USER '${MEDIAWIKI_DBUSER}';
+  GRANT INDEX, CREATE, SELECT, INSERT, UPDATE, DELETE, ALTER, LOCK TABLES
+    ON ${MEDIAWIKI_DBNAME}.*
+    TO '${MEDIAWIKI_DBUSER}' IDENTIFIED BY '${MEDIAWIKI_DBPASS}';
+  FLUSH PRIVILEGES;
 EOF
 
-  # Create LocalSettings.php
-  cd /srv/mediawiki/maintenance
-  php5 install.php \
-    --dbname $MEDIAWIKI_DBNAME \
-    --dbserver $MYSQL_PORT_3306_TCP_ADDR \
-    --dbtype mysql \
-    --dbuser $MEDIAWIKI_DBUSER \
-    --dbpass $MEDIAWIKI_DBPASS \
-    --lang $MEDIAWIKI_LANG \
-    --pass $MEDIAWIKI_ADMIN_PASS \
-    --scriptpath $MEDIAWIKI_SCRIPTPATH \
-    $MEDIAWIKI_SITENAME \
-    $MEDIAWIKI_ADMIN_USER
+# Create LocalSettings.php
+cd ${MEDIAWIKI_DIR}/maintenance
+php5 install.php \
+  --conf ${MEDIAWIKI_DIR}/LocalSettings.php \
+  --dbname $MEDIAWIKI_DBNAME \
+  --dbserver $MYSQL_PORT_3306_TCP_ADDR \
+  --dbtype mysql \
+  --dbuser "$MEDIAWIKI_DBUSER" \
+  --dbpass "$MEDIAWIKI_DBPASS" \
+  --lang "$MEDIAWIKI_LANG" \
+  --pass "$MEDIAWIKI_ADMIN_PASS" \
+  --scriptpath "$MEDIAWIKI_SCRIPTPATH" \
+  "$MEDIAWIKI_SITENAME" \
+  "$MEDIAWIKI_ADMIN_USER"
 
-  # Enable pretty URLs starting from base
-  cat >>/srv/data/LocalSettings.php <<EOF
+# - enable pretty URLs starting from base
+# - include extra local settings
+cat >>${LOCAL_SETTINGS} <<EOF
 \$wgArticlePath = "/w/\$1";
 \$wgUsePathInfo = true;
 \$wgEnableUploads = true;
 \$wgFileExtensions = array(
-  'png', 'gif', 'jpg', 'jpeg', 'doc',
-  'xls', 'mpp', 'pdf', 'ppt', 'tiff', 'bmp', 'docx', 'xlsx',
-  'pptx', 'ps', 'odt', 'ods', 'odp', 'odg'
+'png', 'gif', 'jpg', 'jpeg', 'doc',
+'xls', 'mpp', 'pdf', 'ppt', 'tiff', 'bmp', 'docx', 'xlsx',
+'pptx', 'ps', 'odt', 'ods', 'odp', 'odg'
 );
+
+include '${EXTRA_LOCAL_SETTINGS}';
 EOF
 
-  # Override incorrect default logo path
-  sed -i "s#^\\\$wgLogo\s*= \"/wiki\(.*\)\";\$#\$wgLogo = \"\1\";#" /srv/data/LocalSettings.php
-fi
+# Override incorrect default logo path
+sed -i "s#^\\\$wgLogo\s*= \"/wiki\(.*\)\";\$#\$wgLogo = \"\1\";#" ${LOCAL_SETTINGS}
 
 sed -i \
   -e "s#^\\\$wgDBserver = \(.*\);\$#\$wgDBserver = \"${MYSQL_PORT_3306_TCP_ADDR}\";#" \
@@ -62,4 +71,4 @@ sed -i \
   -e "s#^\\\$wgScriptPath = \(.*\);\$#\$wgScriptPath = \"${MEDIAWIKI_SCRIPTPATH}\";#" \
   -e "s#^\\\$wgServer = \(.*\);\$#\$wgServer = \"${MEDIAWIKI_SERVER}\";#" \
   -e "s#^\\\$wgLanguageCode = \(.*\);\$#\$wgLanguageCode = \"${MEDIAWIKI_LANG}\";#" \
-  /srv/data/LocalSettings.php
+  ${LOCAL_SETTINGS}
