@@ -20,6 +20,8 @@ DATA_DIR=/srv/data
 LOCAL_SETTINGS=${MEDIAWIKI_DIR}/LocalSettings.php
 EXTRA_LOCAL_SETTINGS=${DATA_DIR}/LocalSettings.php
 
+sed -i -r 's#^.*daemonize *=.*$#daemonize = no#' /etc/php5/fpm/php-fpm.conf
+
 # Add DB user and grant privileges
 mysql -u root -p${MYSQL_ENV_MYSQL_ROOT_PASSWORD} -h ${MYSQL_PORT_3306_TCP_ADDR} <<EOF
   CREATE DATABASE IF NOT EXISTS ${MEDIAWIKI_DBNAME};
