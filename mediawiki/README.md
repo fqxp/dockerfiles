@@ -7,7 +7,7 @@ and make the images directory writable for the nginx image, e.g. like this:
     mkdir /srv/mediawiki/config /srv/mediawiki/images
     chown www-data /srv/mediawiki/images
 
-# Running the first time
+# Running mediawiki
 
 Run the image like this:
 
@@ -26,23 +26,8 @@ Page URLs will have the form `http://localhost:8080/w/Page_Name`.
 
 ## Environment variables
 
-Unless otherwise noted, it is necessary to set all of these environment
-variables:
+These are the environment variables needed to run mediawiki:
 
-- `MEDIAWIKI_DBNAME`: MySQL database name to use.
-- `MEDIAWIKI_DBUSER`: MySQL username to use.
-- `MEDIAWIKI_DBPASS`: MySQL user password _(default: generate)_.
-- `MEDIAWIKI_LANG`: Wiki language _(default: en)_.
-- `MEDIAWIKI_ADMIN_USER`: MediaWiki administrator username _(default:
-  WikiSysop)_.
-- `MEDIAWIKI_ADMIN_PASS`: MediaWiki administrator password.
-- `MEDIAWIKI_SITENAME`: Name of the wiki.
-- `MEDIAWIKI_SERVER`: The protocol and server name to use in fully-qualified
-  URLs. This is the base URL under which the wiki will be accessible. If put
-  behind a reverse proxy, you need to use the public URL here. Example:
-  `http://example.com`.
-
-## SSH access
-
-The image has optional SSH access, see the `fqxp/base` image for further info on
-this.
+- `MEDIAWIKI_DB_NAME`: MySQL database name to use
+- `MEDIAWIKI_DB_USER`: MySQL username to use
+- `MEDIAWIKI_DB_PASSWORD`: MySQL user password
