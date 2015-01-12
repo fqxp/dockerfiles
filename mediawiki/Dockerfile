@@ -1,4 +1,5 @@
 from fqxp/nginx-php
+maintainer Frank Ploss <frank@fqxp.de>
 
 env DEBIAN_FRONTEND noninteractive
 

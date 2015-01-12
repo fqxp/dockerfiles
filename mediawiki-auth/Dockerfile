@@ -1,4 +1,5 @@
 from fqxp/mediawiki
+maintainer Frank Ploss <frank@fqxp.de>
 
 run mkdir /srv/mediawiki/extensions/Auth_remoteuser
 
