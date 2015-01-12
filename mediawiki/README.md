@@ -1,41 +1,28 @@
 # A Debian-based mediawiki Docker container
 
 # Setup
+Create directories for configuration and images (if you want to enable uploads)
+and make the images directory writable for the nginx image, e.g. like this:
 
-Create two directories `LOCAL_DATA_DIR` and `LOCAL_LOG_DIR` on the server.
-Create a directory `images` in `LOCAL_DATA_DIR` if you want to let users
-upload files. `chown www-data.www-data LOCAL_DATA_DIR` and `chmod 755
-LOCAL_DATA_DIR`.
-
-The mediawiki image needs a running `orchardup/mysql` instance to work.
+    mkdir /srv/mediawiki/config /srv/mediawiki/images
+    chown www-data /srv/mediawiki/images
 
 # Running the first time
 
-When running the image the first with a given `LOCAL_DATA_DIR`, the image checks
-if a `LocalSettings.php` does yet exist. If not, it will create a
-`LocalSettings.php` file.
+Run the image like this:
 
-Here is an example of how to run a mediawiki image:
-
-    docker run -d \
-      -e MEDIAWIKI_DBNAME=test_wiki
-      -e MEDIAWIKI_DBUSER=test_wiki_user
-      -e MEDIAWIKI_DBPASS=very-secure
-      -e MEDIAWIKI_LANG=de
-      -e MEDIAWIKI_ADMIN_USER=Admin
-      -e MEDIAWIKI_ADMIN_PASS=even-more-secure
-      -e MEDIAWIKI_SITENAME="Test Wiki"
-      -e MEDIAWIKI_SERVER=http://localhost:8080
-      -v /srv/test_wiki/data:/srv/data \
-      -v /srv/test_wiki/log:/var/log/apache2 \
-      --link=hopeful_mclean:mysql
+    docker run -d -e MEDIAWIKI_DB_NAME=test_wiki -e MEDIAWIKI_DB_USER=test_wiki_user \
+      -e MEDIAWIKI_DB_PASSWORD=very-secure -v /srv/test_wiki/config:/srv/mediawiki/config \
+      -v /srv/test_wiki/images:/srv/mediawiki/images --link=hopeful_mclean:mysql
       -p 8080:80 fqxp/mediawiki
 
 This will start a web server on the server port 8080 which is accessible via the
-URL `http://localhost:8080`. Page URLs will have the form
-`http://localhost:8080/w/Page_Name`.
+URL `http://localhost:8080`.
 
-It is linked to the running `orchardup/mysql` named `hopeful_mclean`.
+To install the database tables and create `LocalSettings.php`, configure
+MediaWiki at `http://localhost:8080/mw-config/index.php`
+
+Page URLs will have the form `http://localhost:8080/w/Page_Name`.
 
 ## Environment variables
 
