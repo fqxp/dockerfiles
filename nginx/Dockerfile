@@ -1,17 +1,16 @@
-from fqxp/base
+from debian:wheezy
 maintainer Frank Ploss <frank@fqxp.de>
 
 env DEBIAN_FRONTEND noninteractive
 
 run apt-get update
-run apt-get install -y --force-yes nginx-light
+run apt-get install -y --force-yes nginx-light supervisor
 
-# add nginx supervisor service
-add nginx.conf /etc/supervisor/conf.d/
+add site.conf /etc/nginx/sites-available/default
+add supervisor.conf /etc/supervisor/conf.d/nginx.conf
 
-# disable default site configuration
-run rm /etc/nginx/sites-enabled/default
+expose 80
 
-expose 80 443
+volume /srv/www
 
-cmd /start.sh
+cmd ["/usr/bin/supervisord", "--nodaemon"]
