@@ -5,4 +5,4 @@ run DEBIAN_FRONTEND=noninteractive apt-get install -y tor
 
 expose 9050
 
-cmd /usr/sbin/tor
+cmd ["/usr/sbin/tor"]
