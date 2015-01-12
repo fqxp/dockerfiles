@@ -7,3 +7,8 @@ Mediawiki extension.
 
 To make use of this, the HTTP server must be configured to require
 HTTP authentication.
+
+Add the following lines to the end of LocalSettings.php:
+
+    require_once("\$IP/extensions/Auth_remoteuser/Auth_remoteuser.php");
+    \$wgAuth = new Auth_remoteuser();
